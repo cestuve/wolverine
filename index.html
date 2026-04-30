@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wolverine vs. Buckeye: A Totally Objective Presentation</title>
+  <style>
+    :root {
+      --michigan-blue: #00274C;
+      --michigan-maize: #FFCB05;
+      --buckeye-red: #BB0000;
+      --midnight: #071321;
+      --soft-white: #F7F4EA;
+      --muted: rgba(255,255,255,.74);
+      --glass: rgba(255,255,255,.12);
+      --glass-strong: rgba(255,255,255,.18);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #144979 0%, var(--michigan-blue) 38%, var(--midnight) 100%);
+      color: white;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deck::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,203,5,.12), transparent 34%, rgba(187,0,0,.08) 70%, transparent),
+        radial-gradient(circle at 80% 10%, rgba(255,203,5,.18), transparent 26%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: clamp(28px, 5vw, 70px);
+      display: none;
+      opacity: 0;
+      transform: translateX(34px) scale(.985);
+      transition: opacity .55s ease, transform .55s ease;
+      z-index: 1;
+    }
+
+    .slide.active {
+      display: grid;
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,203,5,.18), transparent 26%),
+        radial-gradient(circle at 10% 90%, rgba(187,0,0,.12), transparent 24%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, 100%);
+      margin: auto;
+    }
+
+    .center { text-align: center; }
+    .eyebrow {
+      display: inline-block;
+      font-weight: 850;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: var(--michigan-maize);
+      font-size: clamp(13px, 1.5vw, 18px);
+      margin-bottom: 18px;
+    }
+
+    h1, h2 { margin: 0; line-height: .96; letter-spacing: -.055em; }
+    h1 { font-size: clamp(48px, 9.5vw, 116px); }
+    h2 { font-size: clamp(38px, 6vw, 82px); }
+    h3 { letter-spacing: -.035em; }
+    p { font-size: clamp(19px, 2.4vw, 31px); line-height: 1.35; color: var(--muted); }
+
+    .hero-line {
+      font-size: clamp(24px, 3.1vw, 42px);
+      max-width: 900px;
+      margin: 28px auto 0;
+    }
+
+    .maize { color: var(--michigan-maize); }
+    .red { color: #ff6868; }
+    .huge-emoji { font-size: clamp(92px, 14vw, 180px); line-height: 1; filter: drop-shadow(0 28px 45px rgba(0,0,0,.3)); }
+
+    .cinematic {
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,39,76,.75)),
+        radial-gradient(circle at 74% 42%, rgba(255,203,5,.18), transparent 28%);
+    }
+
+    .cinematic .spotlight {
+      position: absolute;
+      width: 48vw;
+      height: 48vw;
+      border-radius: 50%;
+      right: -12vw;
+      top: -10vw;
+      background: radial-gradient(circle, rgba(255,203,5,.24), transparent 62%);
+      animation: sweep 5s ease-in-out infinite alternate;
+    }
+
+    .film-bars::before, .film-bars::after {
+      content: "";
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 9vh;
+      background: rgba(0,0,0,.62);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .film-bars::before { top: 0; }
+    .film-bars::after { bottom: 0; }
+
+    @keyframes sweep {
+      from { transform: translate(-40px, 30px) scale(1); opacity: .7; }
+      to { transform: translate(20px, -20px) scale(1.12); opacity: 1; }
+    }
+
+    .evidence-stamp {
+      display: inline-block;
+      margin-top: 26px;
+      border: 3px solid var(--michigan-maize);
+      color: var(--michigan-maize);
+      border-radius: 18px;
+      padding: 12px 18px;
+      font-weight: 950;
+      letter-spacing: .06em;
+      transform: rotate(-3deg);
+      font-size: clamp(20px, 2.6vw, 34px);
+      animation: stamp .7s .6s cubic-bezier(.2,1.5,.4,1) both;
+    }
+
+    @keyframes stamp {
+      from { opacity: 0; transform: rotate(-10deg) scale(1.5); }
+      to { opacity: 1; transform: rotate(-3deg) scale(1); }
+    }
+
+    .paw-trail {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      z-index: 1;
+    }
+    .paw-trail span {
+      position: absolute;
+      font-size: clamp(38px, 5vw, 72px);
+      animation: pawFloat 6s ease-in-out infinite alternate;
+    }
+    .paw-trail span:nth-child(1) { left: 12%; top: 72%; animation-delay: 0s; }
+    .paw-trail span:nth-child(2) { left: 25%; top: 58%; animation-delay: .35s; }
+    .paw-trail span:nth-child(3) { left: 38%; top: 44%; animation-delay: .7s; }
+    .paw-trail span:nth-child(4) { left: 52%; top: 30%; animation-delay: 1s; }
+    .paw-trail span:nth-child(5) { left: 68%; top: 20%; animation-delay: 1.35s; }
+
+    @keyframes pawFloat {
+      from { transform: translateY(10px) rotate(-12deg); }
+      to { transform: translateY(-10px) rotate(-2deg); }
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(20px, 4vw, 54px);
+      align-items: stretch;
+      margin-top: 46px;
+    }
+
+    .card {
+      background: var(--glass);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 30px;
+      padding: clamp(24px, 3vw, 40px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 80px rgba(0,0,0,.28);
+    }
+
+    .card h3 {
+      font-size: clamp(25px, 3vw, 42px);
+      margin: 0 0 18px;
+    }
+
+    .card p, .card li { font-size: clamp(18px, 2.1vw, 27px); }
+    ul { margin: 18px 0 0; padding-left: 1.15em; color: var(--muted); text-align: left; }
+    li { margin: 12px 0; line-height: 1.25; }
+
+    .matchup {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-top: 48px;
+    }
+
+    .fighter {
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+    }
+
+
+    @keyframes rumble {
+      from { transform: translateX(-2px) rotate(-.4deg); }
+      to { transform: translateX(2px) rotate(.4deg); }
+    }
+
+    @keyframes tinyRoll {
+      from { transform: translateX(0) rotate(0deg); }
+      to { transform: translateX(8px) rotate(2deg); }
+    }
+
+    .vs {
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 950;
+      color: var(--michigan-maize);
+      transform: rotate(-8deg);
+      text-shadow: 0 8px 24px rgba(0,0,0,.28);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 999px;
+      background: rgba(255,203,5,.16);
+      border: 1px solid rgba(255,203,5,.32);
+      color: white;
+      padding: 10px 16px;
+      font-weight: 800;
+      margin: 8px;
+      font-size: clamp(16px, 1.8vw, 22px);
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 46px;
+    }
+
+    .stat {
+      padding: 30px;
+      border-radius: 28px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.17);
+      min-height: 230px;
+      transform: translateY(10px);
+      animation: riseIn .6s ease both;
+    }
+    .stat:nth-child(2) { animation-delay: .1s; }
+    .stat:nth-child(3) { animation-delay: .2s; }
+    .stat .num { font-size: clamp(50px, 6vw, 86px); font-weight: 950; color: var(--michigan-maize); line-height: .9; }
+    .stat p { margin: 18px 0 0; font-size: clamp(18px, 2vw, 25px); }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .quote {
+      font-size: clamp(30px, 4.5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+      font-weight: 900;
+      max-width: 1030px;
+      margin: 32px auto 0;
+    }
+
+    .tiny { font-size: clamp(13px, 1.2vw, 16px); color: rgba(255,255,255,.56); }
+
+    .choice-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 44px;
+    }
+
+    .choice, .game-item {
+      cursor: pointer;
+      border: 2px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.1);
+      color: white;
+      border-radius: 28px;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      font-family: inherit;
+    }
+    .choice { min-height: 235px; }
+    .choice:hover, .choice:focus, .game-item:hover, .game-item:focus { transform: translateY(-4px); background: rgba(255,255,255,.18); border-color: var(--michigan-maize); outline: none; }
+    .choice strong { display: block; font-size: clamp(28px, 4vw, 52px); margin-top: 10px; }
+
+    .reveal {
+      display: none;
+      margin-top: 26px;
+      padding: 20px 24px;
+      border-radius: 22px;
+      background: rgba(255,203,5,.16);
+      border: 1px solid rgba(255,203,5,.34);
+      color: white;
+      font-size: clamp(21px, 2.5vw, 32px);
+      font-weight: 850;
+    }
+    .reveal.show { display: block; animation: pop .35s ease both; }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .mini-game {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(10px, 1.5vw, 18px);
+      margin-top: 36px;
+    }
+    .game-item {
+      min-height: clamp(74px, 10vw, 112px);
+      font-size: clamp(38px, 5vw, 72px);
+      padding: 12px;
+      position: relative;
+    }
+    .game-item.found {
+      background: rgba(255,203,5,.22);
+      border-color: var(--michigan-maize);
+      animation: pop .35s ease both;
+    }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+      font-size: clamp(20px, 2.6vw, 34px);
+      font-weight: 850;
+    }
+    .comparison-row div { padding: 18px 20px; border-radius: 20px; background: rgba(255,255,255,.1); }
+    .comparison-row div:first-child { border-left: 6px solid var(--michigan-maize); }
+    .comparison-row div:last-child { border-left: 6px solid #ff6868; color: rgba(255,255,255,.78); }
+
+    .final-badge {
+      display: inline-block;
+      margin-top: 34px;
+      font-size: clamp(25px, 3.3vw, 46px);
+      font-weight: 950;
+      background: var(--michigan-maize);
+      color: var(--michigan-blue);
+      padding: 16px 28px;
+      border-radius: 999px;
+      transform: rotate(-2deg);
+      box-shadow: 0 25px 50px rgba(0,0,0,.26);
+    }
+
+    .nav {
+      position: fixed;
+      z-index: 20;
+      left: 26px;
+      right: 26px;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .nav button, .primary-btn {
+      pointer-events: auto;
+      border: 0;
+      background: var(--michigan-maize);
+      color: var(--michigan-blue);
+      font-weight: 950;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0,0,0,.22);
+      transition: transform .15s ease, opacity .15s ease;
+      font-family: inherit;
+    }
+    .nav.hidden { display: none; }
+
+    .nav button:hover, .primary-btn:hover { transform: translateY(-2px); }
+    .nav button:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+
+    .progress-wrap {
+      flex: 1;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      overflow: hidden;
+      pointer-events: none;
+      max-width: 520px;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--michigan-maize), #fff0a6);
+      border-radius: inherit;
+      transition: width .25s ease;
+    }
+
+    .slide-count {
+      font-weight: 850;
+      color: rgba(255,255,255,.72);
+      min-width: 68px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    @media (max-width: 820px) {
+      .two-col, .choice-wrap, .data-grid, .matchup, .comparison-row { grid-template-columns: 1fr; }
+      .mini-game { grid-template-columns: repeat(3, 1fr); }
+      .matchup { gap: 12px; }
+      .fighter { min-height: 200px; }
+      .vs { transform: none; }
+      .slide { padding-bottom: 100px; overflow-y: auto; }
+      body { overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgAudio" loop preload="auto">
+    <source src="https://cestuve.github.io/wolverine/wolverines.mp3" type="audio/mpeg">
+  </audio>
+
+  <main class="deck" aria-live="polite">
+    <section class="slide active cinematic film-bars" data-sound="cinematic">
+      <div class="spotlight"></div>
+      <div class="paw-trail" aria-hidden="true"><span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span><span>🐾</span></div>
+      <div class="content center">
+        <div class="eyebrow">A totally objective presentation</div>
+        <h1>Wolverine vs. Buckeye</h1>
+        <p class="hero-line">A short investigation into strength, survival, and why one of these things is unfortunately just a nut</p>
+        <div class="evidence-stamp">CASE FILE OPENED</div>
+        <br>
+        <button class="primary-btn" style="margin-top:28px" onclick="startDeck()">Begin the Evidence</button>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="click">
+      <div class="content center">
+        <h2>You might be married to a Buckeye fan,</h2>
+        <p class="hero-line">but the good news is</p>
+        <div class="quote maize">there is still hope for a Wolverine conversion.</div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="growl">
+      <div class="content">
+        <div class="eyebrow">Exhibit A</div>
+        <h2>Let’s start with biology</h2>
+        <div class="two-col">
+          <div class="card center">
+            <div class="huge-emoji">🐾</div>
+            <h3>Wolverine</h3>
+            <ul>
+              <li>Fierce mammal</li>
+              <li>Built for harsh conditions</li>
+              <li>Known for punching above its weight</li>
+            </ul>
+          </div>
+          <div class="card center">
+            <div class="huge-emoji">🌰</div>
+            <h3>Buckeye</h3>
+            <ul>
+              <li>Tree seed</li>
+              <li>Frequently decorative</li>
+              <li>Best-case scenario: keychain</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="plink">
+      <div class="content center">
+        <div class="eyebrow">Exhibit B</div>
+        <h2>The fight test</h2>
+        <div class="matchup">
+          <div class="card fighter">
+            <div>
+              <div class="huge-emoji">🐺</div>
+              <h3>Wolverine</h3>
+              <p>Claws, chaos, survival energy</p>
+            </div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="card fighter">
+            <div>
+              <div class="huge-emoji">🌰</div>
+              <h3>Buckeye</h3>
+              <p>Rolls slightly</p>
+            </div>
+          </div>
+        </div>
+        <p class="hero-line maize"><strong>This is not just a rivalry; it is a nature documentary.</strong></p>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="click">
+      <div class="content">
+        <div class="eyebrow">Exhibit C</div>
+        <h2>Let’s talk vibes</h2>
+        <div style="margin-top:34px">
+          <span class="tag">🐾 Grit</span>
+          <span class="tag">💪 Resilience</span>
+          <span class="tag">⚡ “I will survive anything”</span>
+          <span class="tag">🏆 Big House energy</span>
+        </div>
+        <div class="comparison-row">
+          <div>Wolverine: legend of the wild</div>
+          <div>Buckeye: fall centerpiece</div>
+        </div>
+        <div class="comparison-row">
+          <div>Wolverine: walks into a blizzard</div>
+          <div>Buckeye: placed in a bowl</div>
+        </div>
+        <div class="comparison-row">
+          <div>Wolverine: feared by animals</div>
+          <div>Buckeye: feared by toddlers and dogs</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="chime">
+      <div class="content center">
+        <h2>Who would you rather be?</h2>
+        <p class="hero-line">Choose carefully. Your household credibility is on the line.</p>
+        <div class="choice-wrap">
+          <button class="choice" onclick="showReveal('correct')" aria-label="Choose Wolverine">
+            <div><div class="huge-emoji">🐾</div><strong>A Wolverine</strong></div>
+          </button>
+          <button class="choice" onclick="showReveal('alsoCorrect')" aria-label="Choose Buckeye">
+            <div><div class="huge-emoji">🌰</div><strong>A Nut</strong></div>
+          </button>
+        </div>
+        <div id="correct" class="reveal">Correct: fierce, iconic, and difficult to defeat</div>
+        <div id="alsoCorrect" class="reveal">We respect your choice, but the correct answer is still Wolverine.</div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="game">
+      <div class="content center">
+        
+        <h2>Find the dangerous one</h2>
+        <p class="hero-line">A difficult challenge in which only one option has claws</p>
+        <div class="mini-game" aria-label="Find the wolverine among the buckeyes">
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="winGame(this)">🐺</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+          <button class="game-item" onclick="missGame(this)">🌰</button>
+        </div>
+        <div id="gameReveal" class="reveal">You found it—case closed. The dangerous one was not the decorative seed.</div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="click">
+      <div class="content">
+        <div class="eyebrow">Exhibit D</div>
+        <h2>Let’s look at the data</h2>
+        <div class="data-grid">
+          <div class="stat">
+            <div class="num">100%</div>
+            <p>of wolverines would defeat a buckeye in a mascot-based performance review</p>
+          </div>
+          <div class="stat">
+            <div class="num">0%</div>
+            <p>of buckeyes have ever chased anything, unless gravity was involved</p>
+          </div>
+          <div class="stat">
+            <div class="num">87%</div>
+            <p>of people agree “wolverine” sounds cooler. The other 13% live in Columbus</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="plink">
+      <div class="content center">
+        <h2>A House Divided</h2>
+        <div class="quote">One person is Buckeye loyal.<br><span class="maize">One person has evidence.</span></div>
+      </div>
+    </section>
+
+    <section class="slide" data-sound="victory">
+      <div class="content center">
+        <h1>Go Blue</h1>
+      </div>
+    </section>
+
+    <nav class="nav" aria-label="Slide navigation">
+      <button id="prevBtn" onclick="prevSlide()">← Back</button>
+      <div class="progress-wrap" aria-hidden="true"><div class="progress" id="progress"></div></div>
+      <div class="slide-count" id="slideCount">1 / 10</div>
+      <button id="nextBtn" onclick="nextSlide()">Next →</button>
+    </nav>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progress = document.getElementById('progress');
+    const slideCount = document.getElementById('slideCount');
+    const bgAudio = document.getElementById('bgAudio');
+    let index = 0;
+    let soundOn = false;
+    let audioCtx;
+
+    bgAudio.volume = 0.22;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function tone(freq, duration, type = 'sine', gain = 0.05) {
+      if (!soundOn) return;
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const vol = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      vol.gain.setValueAtTime(gain, audioCtx.currentTime);
+      vol.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(vol).connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSound(kind) {
+      if (!soundOn) return;
+      if (kind === 'cinematic') { tone(98, .16, 'sawtooth', .035); setTimeout(() => tone(196, .18, 'triangle', .032), 130); setTimeout(() => tone(392, .26, 'sine', .035), 300); }
+      else if (kind === 'growl') { tone(90, .11, 'sawtooth', .045); setTimeout(() => tone(64, .18, 'sawtooth', .035), 70); }
+      else if (kind === 'plink') { tone(620, .08, 'triangle', .045); setTimeout(() => tone(420, .08, 'triangle', .035), 85); }
+      else if (kind === 'game') { tone(440, .06, 'square', .025); setTimeout(() => tone(660, .06, 'square', .025), 85); }
+      else if (kind === 'victory') { tone(392, .11); setTimeout(() => tone(494, .11), 110); setTimeout(() => tone(659, .18), 220); }
+      else if (kind === 'chime') { tone(523, .09); setTimeout(() => tone(784, .13), 90); }
+      else { tone(330, .06, 'triangle', .035); }
+    }
+
+    function setSound(on) {
+      soundOn = on;
+      if (soundOn) {
+        bgAudio.play().catch(() => {});
+      } else {
+        bgAudio.pause();
+      }
+    }
+
+
+    function startDeck() {
+      setSound(true);
+      nextSlide();
+    }
+
+    function updateDeck(play = true) {
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      document.querySelector('.nav').classList.toggle('hidden', index === 0);
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === slides.length - 1;
+      nextBtn.textContent = index === slides.length - 1 ? 'Done ✓' : 'Next →';
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      slideCount.textContent = `${index + 1} / ${slides.length}`;
+      document.querySelectorAll('.reveal').forEach(r => r.classList.remove('show'));
+      document.querySelectorAll('.game-item').forEach(item => item.classList.remove('found'));
+    }
+
+    function nextSlide() {
+      if (index < slides.length - 1) {
+        index += 1;
+        updateDeck();
+      }
+    }
+
+    function prevSlide() {
+      if (index > 0) {
+        index -= 1;
+        updateDeck();
+      }
+    }
+
+    function showReveal(id) {
+      document.querySelectorAll('.reveal').forEach(r => r.classList.remove('show'));
+      document.getElementById(id).classList.add('show');
+    }
+
+    function winGame(button) {
+      button.classList.add('found');
+      document.getElementById('gameReveal').classList.add('show');
+    }
+
+    function missGame(button) {
+      button.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-6px)' },
+        { transform: 'translateX(6px)' },
+        { transform: 'translateX(0)' }
+      ], { duration: 260, easing: 'ease-in-out' });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    updateDeck(false);
+  </script>
+</body>
+</html>
